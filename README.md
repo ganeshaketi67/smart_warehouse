@@ -394,6 +394,28 @@ Start the production server:
 pnpm start
 ```
 
+### Deploying to Vercel
+
+This project is a Vite frontend plus a Node/Express backend. For Vercel deployments, configure the project to serve the static frontend from `dist/public` and keep a SPA fallback route so `/dashboard`, `/inventory`, etc. do not 404.
+
+The repository includes a `vercel.json` with the required fallback:
+
+```json
+{
+  "version": 2,
+  "buildCommand": "pnpm build",
+  "outputDirectory": "dist/public",
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}
+```
+
+In the Vercel dashboard, set the project output directory to `dist/public`.
+
+> Note: the Express API is not deployed by Vercel’s static hosting alone. For the backend routes (`/api`, OAuth, etc.), host them on a Node-compatible platform such as Render, Railway, or convert them into serverless functions.
+
 ---
 
 ## 🧪 Tests
